@@ -13,11 +13,17 @@ from utils.get_config import GetConfig
 import os
 
 config = GetConfig()
+user_id = 0
+user_count = int(str(config.sections()).count('USER'))-1
 
 if __name__ == '__main__':
   if config['PROXY']['ProxyOn'] == 'true':
     os.environ['HTTP_PROXY'] = config['PROXY']['HttpProxy']
     os.environ['HTTPS_PROXY'] = config['PROXY']['HttpsProxy']
-
-  RSS_dict = FeedParaser(config['WEIBO']['WeiboRss'])
-  Feed2Toot(RSS_dict)
+    
+  while user_id <= user_count:
+    user_name = 'USER'+str(user_id)
+    RSS_dict = FeedParaser(config[user_name]['Rss'])
+    Feed2Toot(user_name, RSS_dict)
+    user_id += 1
+  

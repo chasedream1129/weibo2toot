@@ -13,7 +13,7 @@ from .get_config import GetConfig
 
 config = GetConfig()
 
-def MediaDownloader(data):
+def MediaDownloader(user_name, data):
   """
   :param object: Data return from TweetDecoder
   :return {'gif_count': (max+1)gif_id, 'video_count': video_id, 'image_count': img_id, 'plain': str}
@@ -46,7 +46,7 @@ def MediaDownloader(data):
     for url in data['video']:
       if (video_id <= 1):
         try:
-          if config['MASTODON']['IncludeVideo'] != 'false':
+          if config[user_name]['IncludeVideo'] != 'false':
             urllib.request.urlretrieve(url, 'temp/video'+str(video_id)+'.mp4')
 
           urllib.request.urlretrieve(data['video_poster'][video_id-1], 'temp/video'+str(video_id)+'.png')

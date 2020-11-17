@@ -32,4 +32,4 @@ def FeedParaser(rss_link):
   return rss
   
 if __name__ == '__main__':
-  print(str(FeedParaser("https://rsshub.app/bilibili/user/dynamic/161775300")))
+  print(str(FeedParaser("https://www.vgtime.com/rss.jhtml")))

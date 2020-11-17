@@ -14,7 +14,7 @@ from .get_config import GetConfig
 
 config = GetConfig()
 
-def TweetDecoder(rss_data):
+def TweetDecoder(user_name, rss_data):
   """
   :params object: Summary from FeedParaser
   :return object
@@ -33,11 +33,11 @@ def TweetDecoder(rss_data):
     if (link.has_attr('data-url')):
       if ('://t.cn/' in link.get('data-url')):
         if ('微博视频' in link.getText()):
-          link.replace_with(f'''[?bs4_replace_flag?] {config['MASTODON']['VideoSourcePrefix']} {link.getText()} {link.get('data-url')} [?bs4_replace_flag?]''')
+          link.replace_with(f'''[?bs4_replace_flag?] {config[user_name]['VideoSourcePrefix']} {link.getText()} {link.get('data-url')} [?bs4_replace_flag?]''')
         else:
-          link.replace_with(f'''[?bs4_replace_flag?] {config['MASTODON']['ExternalLinkPrefix']} {link.getText()} {link.get('data-url')} [?bs4_replace_flag?]''')
+          link.replace_with(f'''[?bs4_replace_flag?] {config[user_name]['ExternalLinkPrefix']} {link.getText()} {link.get('data-url')} [?bs4_replace_flag?]''')
       else:
-        link.replace_with(f'''[?bs4_replace_flag?] {config['MASTODON']['ExternalLinkPrefix']} {link.getText()} {link.get('href')} [?bs4_replace_flag?]''')
+        link.replace_with(f'''[?bs4_replace_flag?] {config[user_name]['ExternalLinkPrefix']} {link.getText()} {link.get('href')} [?bs4_replace_flag?]''')
     elif (link.getText()[-1] == '#'):
       link.replace_with(f'''[?bs4_replace_flag?] {link.getText()[:-1]} [?bs4_replace_flag?]''')
     else:
@@ -67,7 +67,7 @@ def TweetDecoder(rss_data):
   plain_content = unescape(soup.prettify())
   plain_content = plain_content.replace('\n[?bs4_replace_flag?]',' ').replace('[?bs4_replace_flag?]\n',' ').replace('[?bs4_replace_flag?]','').replace('\\n- ','\\n\- ').replace('<|n>','\n')
   # plain_content = re.sub(r'(#[^#]+)#', lambda m : m.group(1)+' ', plain_content)
-  data['plain'] = plain_content + '\n'+config['MASTODON']['SourcePrefix']+' ' + rss_data['link']
+  data['plain'] = plain_content + '\n'+config[user_name]['SourcePrefix']+' ' + rss_data['link']
   return data 
 
 if __name__ == '__main__':

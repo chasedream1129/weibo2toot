@@ -13,7 +13,7 @@ from .feed_decoder import TweetDecoder
 from .media_downloader import MediaDownloader
 from .toot_poster import TootPoster
 
-def Feed2Toot(feed_data):
+def Feed2Toot(user_name, feed_data):
   if path.exists('db.txt'):
     historyList = [line.rstrip('\n') for line in open('db.txt')]
   else:
@@ -24,22 +24,22 @@ def Feed2Toot(feed_data):
       makedirs('temp')
 
     if tweet['id'] not in historyList:
-      print('INFO: decode ' + tweet['id'])
-      tweet_decoded = TweetDecoder(tweet)
-      print('INFO: download ' + tweet['id'])
+      print('INFO: '+user_name+'decode ' + tweet['id'])
+      tweet_decoded = TweetDecoder(user_name, tweet)
+      print('INFO: '+user_name+'download ' + tweet['id'])
       try:
-        toot_content = MediaDownloader(tweet_decoded)
-        print('INFO: download succeed ' + tweet['id'])
+        toot_content = MediaDownloader(user_name, tweet_decoded)
+        print('INFO: '+user_name+'download succeed ' + tweet['id'])
       except Exception:
-        print('ERRO: download failed ' + tweet['id'])
+        print('ERRO: '+user_name+'download failed ' + tweet['id'])
         # for e in Exception:
         #   print(e)
-      print('INFO: post toot ' + tweet['id'])
+      print('INFO: '+user_name+'post toot ' + tweet['id'])
       try:
-        TootPoster(toot_content)
-        print('INFO: post succeed ' + tweet['id'])
+        TootPoster(user_name, toot_content)
+        print('INFO: '+user_name+'post succeed ' + tweet['id'])
       except Exception:
-        print('ERRO: post failed ' + tweet['id'])
+        print('ERRO: '+user_name+'post failed ' + tweet['id'])
       historyList.append(tweet['id'])
 
     if path.exists('temp'):
